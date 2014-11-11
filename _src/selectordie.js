@@ -556,7 +556,9 @@
                 return this.each(function () {
                     var $select  = $(this),
                         $sod     = $select.parent(),
-                        $sodList = $sod.find(".sod_list:first");
+                        $sodList = $sod.find(".sod_list:first"),
+                        $settingsPlaceholderOption = $sod.data("placeholder-option"),
+                        $settingsPrefix            = $select.data("prefix");
 
                     // Check for the SoD
                     if ( $sod.hasClass("sod_select") ) {
@@ -572,8 +574,11 @@
                         }
 
                         // Inserts a <span class="sod_option"> for each <option>
-                        $("option, optgroup", $select).each(function () {
-                            _private.populateSoD($(this), $sodList, $sod);
+                        $("option, optgroup", $select).each(function (i) {
+                            if (i === 0 && $settingsPlaceholderOption && !$settingsPrefix)
+                              _private.populateSoD($(this), $sodList, $sod, true);
+                            else
+                              _private.populateSoD($(this), $sodList, $sod, false);
                         });
                     } else {
                         console.log("Select or Die: There's no SoD to update");
